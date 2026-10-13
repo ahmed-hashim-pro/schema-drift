@@ -55,8 +55,10 @@ go build -o schema-drift ./cmd/schema-drift
 SCHEMA_DRIFT=$PWD/schema-drift examples/gate-demo.sh  # a pull request, as CI sees it
 ```
 
-`go test ./...` runs everything in about half a minute. `make check` adds
-the race detector and gofmt, as CI does.
+`go test ./...` runs everything, and most of its time goes to the
+property tests in `compat/`. `go test -short ./...` runs them on a smaller
+sample. `make check` adds the race detector and
+gofmt, as CI does.
 
 ### In CI
 
@@ -223,16 +225,15 @@ against the validator as an independent oracle:
   `TestSoundness` generates random schema pairs, some independent and most
   produced by mutating one into the other the way people edit contracts.
   For every pair judged compatible, it generates hundreds of events valid
-  under the writer and checks each against the reader. Across three seed
-  sets this came to about 38,600 compatible pairs and **7.6 million
-  events: 0 counterexamples**. The default run covers about 12,900 pairs
-  and 2.5 million events.
+  under the writer and checks each against the reader. The default run
+  covers 12,918 compatible pairs and **2,543,839 events: 0
+  counterexamples**.
 - **Calling a compatible change breaking.** This is the noisy one, and it
   teaches people to ignore the tool. Every reason the checker gives must
   carry a witness event: the writer accepts it, the reader rejects it, and
   the validator has to agree on both. `TestEveryBreakIsProven` fails on any
-  unproven reason. Across the same seed sets that was about 44,700 reasons,
-  **all proven**.
+  unproven reason. The default run judges 7,261 pairs breaking with 15,031
+  reasons, **all proven**.
 
 Getting there took real fixes, each found by these two tests:
 
