@@ -1,0 +1,14 @@
+$ schema-drift check examples/contracts/orders/v2.json examples/contracts/orders/v3.json
+v2 -> v3: NONE (breaking both ways)
+
+backward: consumers on v3 reading events written with v2
+  BREAKING /customer_id: v3 requires "customer_id"; v2 does not, so its events may leave it out
+           e.g. {"order_id":"00000000-0000-4000-8000-000000000000","amount":0,"currency":"USD","created_at":"2024-01-01T00:00:00Z"}
+  BREAKING /amount: v2 allows an integer; v3 does not (it allows string)
+           e.g. {"order_id":"00000000-0000-4000-8000-000000000000","amount":0,"currency":"USD","created_at":"2024-01-01T00:00:00Z"}
+
+forward: consumers on v2 reading events written with v3
+  BREAKING /amount: v3 allows a string; v2 does not (it allows integer)
+           e.g. {"order_id":"00000000-0000-4000-8000-000000000000","amount":"","currency":"USD","created_at":"2024-01-01T00:00:00Z","customer_id":"x"}
+
+mode BACKWARD FAILS (consumers on the new schema must read events written with the old)

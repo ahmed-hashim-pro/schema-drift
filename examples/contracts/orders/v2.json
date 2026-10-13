@@ -1,0 +1,14 @@
+{
+  "title": "Order placed",
+  "description": "v2: optional customer_id, for orders placed by a signed-in customer",
+  "type": "object",
+  "properties": {
+    "order_id":    { "type": "string", "format": "uuid" },
+    "amount":      { "type": "integer", "minimum": 0, "description": "in cents" },
+    "currency":    { "enum": ["USD", "EUR"] },
+    "created_at":  { "type": "string", "format": "date-time" },
+    "customer_id": { "type": "string", "minLength": 1 }
+  },
+  "required": ["order_id", "amount", "currency", "created_at"],
+  "additionalProperties": false
+}

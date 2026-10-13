@@ -1,0 +1,11 @@
+{
+  "title": "Shipment dispatched",
+  "description": "An open schema: producers may add fields without a new version.",
+  "type": "object",
+  "properties": {
+    "shipment_id": { "type": "string", "format": "uuid" },
+    "order_id":    { "type": "string", "format": "uuid" },
+    "shipped_at":  { "type": "string", "format": "date-time" }
+  },
+  "required": ["shipment_id", "order_id", "shipped_at"]
+}

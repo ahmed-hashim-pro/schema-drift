@@ -1,0 +1,12 @@
+{
+  "title": "Payment status changed",
+  "type": "object",
+  "properties": {
+    "payment_id": { "type": "string", "format": "uuid" },
+    "order_id":   { "type": "string", "format": "uuid" },
+    "status":     { "enum": ["authorized", "captured", "failed"] },
+    "amount":     { "type": "integer", "minimum": 0 }
+  },
+  "required": ["payment_id", "order_id", "status", "amount"],
+  "additionalProperties": false
+}

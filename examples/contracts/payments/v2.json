@@ -1,0 +1,13 @@
+{
+  "title": "Payment status changed",
+  "description": "v2: refunds",
+  "type": "object",
+  "properties": {
+    "payment_id": { "type": "string", "format": "uuid" },
+    "order_id":   { "type": "string", "format": "uuid" },
+    "status":     { "enum": ["authorized", "captured", "failed", "refunded"] },
+    "amount":     { "type": "integer", "minimum": 0 }
+  },
+  "required": ["payment_id", "order_id", "status", "amount"],
+  "additionalProperties": false
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Shipment dispatched",
+  "description": "v2: declares the carrier field some producers already send",
+  "type": "object",
+  "properties": {
+    "shipment_id": { "type": "string", "format": "uuid" },
+    "order_id":    { "type": "string", "format": "uuid" },
+    "shipped_at":  { "type": "string", "format": "date-time" },
+    "carrier":     { "enum": ["ups", "dhl", "fedex"] }
+  },
+  "required": ["shipment_id", "order_id", "shipped_at"]
+}

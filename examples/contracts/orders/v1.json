@@ -1,0 +1,12 @@
+{
+  "title": "Order placed",
+  "type": "object",
+  "properties": {
+    "order_id":   { "type": "string", "format": "uuid" },
+    "amount":     { "type": "integer", "minimum": 0, "description": "in cents" },
+    "currency":   { "enum": ["USD", "EUR"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["order_id", "amount", "currency", "created_at"],
+  "additionalProperties": false
+}

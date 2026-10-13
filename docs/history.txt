@@ -1,0 +1,28 @@
+$ schema-drift history examples/contracts
+orders         BACKWARD_TRANSITIVE  v1..v3  1 problem(s)
+payments       FULL                 v1..v2  1 problem(s)
+shipments      BACKWARD             v1..v2  1 problem(s)
+
+orders v3 breaks BACKWARD_TRANSITIVE: consumers on the new schema must read events written with the old
+  consumers on v3 reading events written with v2:
+    BREAKING /customer_id: v3 requires "customer_id"; v2 does not, so its events may leave it out
+             e.g. {"order_id":"00000000-0000-4000-8000-000000000000","amount":0,"currency":"USD","created_at":"2024-01-01T00:00:00Z"}
+    BREAKING /amount: v2 allows an integer; v3 does not (it allows string)
+             e.g. {"order_id":"00000000-0000-4000-8000-000000000000","amount":0,"currency":"USD","created_at":"2024-01-01T00:00:00Z"}
+  consumers on v3 reading events written with v1:
+    BREAKING /customer_id: v3 requires "customer_id"; v1 does not, so its events may leave it out
+             e.g. {"order_id":"00000000-0000-4000-8000-000000000000","amount":0,"currency":"USD","created_at":"2024-01-01T00:00:00Z"}
+    BREAKING /amount: v1 allows an integer; v3 does not (it allows string)
+             e.g. {"order_id":"00000000-0000-4000-8000-000000000000","amount":0,"currency":"USD","created_at":"2024-01-01T00:00:00Z"}
+
+payments v2 breaks FULL: old and new consumers must read both old and new events
+  consumers on v1 reading events written with v2:
+    BREAKING /status: v2 allows "refunded"; v1 does not
+             e.g. {"payment_id":"00000000-0000-4000-8000-000000000000","order_id":"00000000-0000-4000-8000-000000000000","status":"refunded","amount":0}
+
+shipments v2 breaks BACKWARD: consumers on the new schema must read events written with the old
+  consumers on v2 reading events written with v1:
+    BREAKING /carrier: v1 allows "carrier" with any value (additionalProperties); v2 constrains it
+             e.g. {"shipment_id":"00000000-0000-4000-8000-000000000000","order_id":"00000000-0000-4000-8000-000000000000","shipped_at":"2024-01-01T00:00:00Z","carrier":""}
+
+3 problem(s)

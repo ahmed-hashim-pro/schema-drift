@@ -1,0 +1,9 @@
+$ schema-drift verify examples/contracts/orders/v2.json examples/events/orders-mixed.ndjson
+line 2: /order_id: "not-a-uuid" is not a valid uuid
+line 2: /amount: -5 is less than the minimum 0
+line 2: /currency: "GBP" is not one of ["USD","EUR"]
+line 2: /created_at: "yesterday" is not a valid date-time
+line 3: /coupon: property "coupon" is not allowed
+line 4: /: duplicate key "amount"
+line 5: /: required property "amount" is missing
+5 events, 1 valid, 4 invalid
